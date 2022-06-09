@@ -35,24 +35,26 @@ namespace Jitbit.Utils
 
 			try
 			{
-				var process = Process.Start(_defenderPath, $"-Scan -ScanType 3 -File \"{path}\" -DisableRemediation");
-				if (process == null)
+				using (var process = Process.Start(_defenderPath, $"-Scan -ScanType 3 -File \"{path}\" -DisableRemediation"))
 				{
-					_isDefenderAvailable = false; //disable future attempts
-					throw new InvalidOperationException("Failed to start MpCmdRun.exe");
-				}
+					if (process == null)
+					{
+						_isDefenderAvailable = false; //disable future attempts
+						throw new InvalidOperationException("Failed to start MpCmdRun.exe");
+					}
 
-				try
-				{
-					await process.WaitForExitAsync().WaitAsync(TimeSpan.FromMilliseconds(2500));
-				}
-				catch (TimeoutException ex) //timeout
-				{
-					process.Kill();
-					throw new TimeoutException("Timeout waiting for MpCmdRun.exe to return", ex);
-				}
+					try
+					{
+						await process.WaitForExitAsync().WaitAsync(TimeSpan.FromMilliseconds(2500));
+					}
+					catch (TimeoutException ex) //timeout
+					{
+						process.Kill();
+						throw new TimeoutException("Timeout waiting for MpCmdRun.exe to return", ex);
+					}
 
-				return process.ExitCode == 2;
+					return process.ExitCode == 2;
+				}
 			}
 			finally
 			{

@@ -1,5 +1,5 @@
 # WinDefender
-Invokes Windows Defender scan from C# .NET Core (on Windows). Works even in ASP.NET
+Invokes Windows Defender scan from C# .NET Core 6 (on Windows). Works even in ASP.NET
 
 ## Background
 

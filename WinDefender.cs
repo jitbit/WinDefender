@@ -24,14 +24,16 @@ namespace Jitbit.Utils
 				_isDefenderAvailable = false;
 		}
 
-		public static async Task<bool> IsVirus(byte[] file)
+		public static async Task<bool> IsVirus(byte[] file, CancellationToken cancellationToken = default)
 		{
 			if (!_isDefenderAvailable) return false;
 
 			string path = Path.GetTempFileName();
-			await File.WriteAllBytesAsync(path, file); //save temp file
+			await File.WriteAllBytesAsync(path, file, cancellationToken); //save temp file
 
-			await _lock.WaitAsync();
+			if (cancellationToken.IsCancellationRequested) return false;
+
+			await _lock.WaitAsync(cancellationToken);
 
 			try
 			{
@@ -45,12 +47,15 @@ namespace Jitbit.Utils
 
 					try
 					{
-						await process.WaitForExitAsync().WaitAsync(TimeSpan.FromMilliseconds(2500));
+						await process.WaitForExitAsync().WaitAsync(TimeSpan.FromMilliseconds(2500), cancellationToken);
 					}
 					catch (TimeoutException ex) //timeout
 					{
-						process.Kill();
 						throw new TimeoutException("Timeout waiting for MpCmdRun.exe to return", ex);
+					}
+					finally
+					{
+						process.Kill(); //always kill the process, it's fine if it's already exited, but if we were timed out or cancelled via token - let's kill it
 					}
 
 					return process.ExitCode == 2;

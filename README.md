@@ -1,4 +1,5 @@
-# WinDefender
+# WinDefender - Windows Defender C# API
+
 Invokes Windows Defender scan from C# .NET Core 6 (on Windows). Works even in ASP.NET
 
 ## Usage

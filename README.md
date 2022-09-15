@@ -3,6 +3,8 @@ Invokes Windows Defender scan from C# .NET Core 6 (on Windows). Works even in AS
 
 ## Usage
 
+Add this file to your project then call:
+
 ```csharp
 //check by filename
 bool isVirus = await WinDefender.IsVirus(@"c:\path\to\file");

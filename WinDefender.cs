@@ -33,6 +33,11 @@ namespace Jitbit.Utils
 
 			if (cancellationToken.IsCancellationRequested) return false;
 
+			return await IsVirus(path, cancellationToken);
+		}
+
+		public static async Task<bool> IsVirus(string path, CancellationToken cancellationToken = default)
+		{
 			await _lock.WaitAsync(cancellationToken);
 
 			try

@@ -3,7 +3,7 @@ Invokes Windows Defender scan from C# .NET Core 6 (on Windows). Works even in AS
 
 ## Usage
 
-Add this file to your project then call:
+Add [this file](/WinDefender.cs) to your project then call:
 
 ```csharp
 //check by filename

@@ -33,7 +33,14 @@ namespace Jitbit.Utils
 
 			if (cancellationToken.IsCancellationRequested) return false;
 
-			return await IsVirus(path, cancellationToken);
+			try
+			{
+				return await IsVirus(path, cancellationToken);
+			}
+			finally
+			{
+				File.Delete(path); //cleanup temp file
+			}
 		}
 
 		public static async Task<bool> IsVirus(string path, CancellationToken cancellationToken = default)
@@ -69,7 +76,6 @@ namespace Jitbit.Utils
 			finally
 			{
 				_lock.Release();
-				File.Delete(path); //cleanup temp file
 			}
 		}
 	}

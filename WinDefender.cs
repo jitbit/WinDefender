@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-
+//main
 namespace Jitbit.Utils
 {
 	public class WinDefender
